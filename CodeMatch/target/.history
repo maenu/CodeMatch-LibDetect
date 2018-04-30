@@ -1,8 +1,0 @@
-clean clean-files update eclipse
-clean 
-update
-eclipse
-quit
-:q
-exit
-build

@@ -37,7 +37,7 @@ import org.opalj.br.instructions.{ANEWARRAY, CHECKCAST, GETFIELD, GETSTATIC, GOT
 
 object NameLessRepresentation {
 
-  def extractNameLessCode(n: Code, theProject: Project[URL]): Seq[String] = n.collectWithIndex {
+  def extractNameLessCode(n: Code, theProject: Project[URL]): org.opalj.collection.immutable.Chain[String] = n.collectWithIndex {
     case (_, PUTSTATIC(clazz, _, ft)) => "putstatic " + extractTypeIR(clazz, theProject) + ", " + extractTypeIR(ft, theProject)
     case (_, PUTFIELD(clazz, _, ft)) => "putfield " + extractTypeIR(clazz, theProject) + ", " + extractTypeIR(ft, theProject)
 

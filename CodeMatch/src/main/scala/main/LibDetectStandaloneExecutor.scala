@@ -60,7 +60,7 @@ object LibDetectStandaloneExecutor {
           if (file.getName.endsWith(".apk"))
             file = enjarify(file.getAbsolutePath)
           if (args(0).equalsIgnoreCase("write"))
-            DBWriter.main(Array("-cp=" + file.getAbsolutePath + "", "-libcp=android.jar", "-in=" + file.getAbsolutePath))
+            DBWriter.main(Array("-cp=" + file.getAbsolutePath + "", "-libcp=android.jar", "-out=" + file.getAbsolutePath))
           else
             LibDetect.main(Array("-cp=" + file.getAbsolutePath + "", "-libcp=android.jar", "-in=" + file.getAbsolutePath))
         }

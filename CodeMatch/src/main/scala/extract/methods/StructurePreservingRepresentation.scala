@@ -37,7 +37,7 @@ import org.opalj.br.instructions.{ACONST_NULL, ANEWARRAY, ARRAYLENGTH, ATHROW, A
 
 object StructurePreservingRepresentation {
 
-  def extractStructurePreservingCode(n: Code, theProject: Project[URL]): Seq[String] = n.collectWithIndex {
+  def extractStructurePreservingCode(n: Code, theProject: Project[URL]): org.opalj.collection.immutable.Chain[String] = n.collectWithIndex {
     case (_, PUTSTATIC(clazz, _, ft)) => "put " + extractTypeIR(clazz, theProject) + ", " + extractTypeIR(ft, theProject)
     case (_, PUTFIELD(clazz, _, ft)) => "put " + extractTypeIR(clazz, theProject) + ", " + extractTypeIR(ft, theProject)
 

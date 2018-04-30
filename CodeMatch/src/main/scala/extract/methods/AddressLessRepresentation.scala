@@ -36,7 +36,7 @@ import org.opalj.br.instructions.{GOTO, GOTO_W, IFGE, IFGT, IFLE, IFLT, IFNE, IF
 
 object AddressLessRepresentation {
 
-  def extractAddressLessCode(n: Code, theProject: Project[URL]): Seq[String] = n.collectWithIndex {
+  def extractAddressLessCode(n: Code, theProject: Project[URL]): org.opalj.collection.immutable.Chain[String] = n.collectWithIndex {
     case (_, IF_ACMPEQ(direction)) => "IF_ACMPEQ " + (if (direction > 0) "along" else "back")
     case (_, IF_ACMPNE(direction)) => "IF_ACMPNE " + (if (direction > 0) "along" else "back")
     case (_, IF_ICMPEQ(direction)) => "IF_ICMPEQ " + (if (direction > 0) "along" else "back")

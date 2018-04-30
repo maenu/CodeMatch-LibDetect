@@ -52,7 +52,7 @@ object LibDetect extends AnalysisExecutor {
   private val conn = DriverManager.getConnection(DB_URL, USER_NAME, PASSWD)
 
   private val selection = "m.bcode as bcode,m.mlen as mlen,m.msig as msig, c.fqn as fqn, c.loc as loc, c.mcount as mcount"
-  private val tables = "androidlib.mthdtbl m, androidlib.classxmthd cm, androidlib.classtbl c"
+  private val tables = "androidlib.mthdtbl m, androidlib.classXmthd cm, androidlib.classtbl c"
 
   private val bcodeP = conn.prepareStatement(
     "Select " + selection + " from " + tables + " where m.bcode=? and cm.bcode_id=m.bcode and cm.uniqid_cl=c.uniqid")
@@ -71,7 +71,7 @@ object LibDetect extends AnalysisExecutor {
 
   var results = mutable.HashMap.empty[String, (String, Double)]
 
-  var debug = false
+  var debug = true
 
   var mainPkg = ""
 
@@ -161,20 +161,21 @@ object LibDetect extends AnalysisExecutor {
           }
         }
       }
+      println(results.size + " library classes found")
       BasicReport(results.size + " library classes found")
     }
   }
 
   def findBestMatchingMethods(m: Method, cf: ClassFile, theProject: Project[URL]): Set[MethodData] = {
     var matchedMethods = mutable.HashSet.empty[MethodData]
-    val bcode = sha1Bytes(m.toJava() + "\n" + m.body.get)
+    val bcode = sha1Bytes(m.toJava + "\n" + m.body.get)
 
     matchedMethods = getMatchingMethods(bcodePFqn, bcode, cf.fqn, 1.0d, "bcodeFQN")
     if (matchedMethods.isEmpty) {
       matchedMethods = getMatchingMethods(bcodeP, bcode, 1.0d, "bcode")
       if (matchedMethods.isEmpty) {
         val irMethod = AddressLessRepresentation.extractAddressLessCode(m.body.get, theProject)
-        val aar = sha1Bytes(AddressLessRepresentation.removeModifiers(m.toJava()) + "\n" + irMethod)
+        val aar = sha1Bytes(AddressLessRepresentation.removeModifiers(m.toJava) + "\n" + irMethod)
         matchedMethods = getMatchingMethods(aarPFqn, aar, cf.fqn, 1.0d, "aarFQN")
         if (matchedMethods.isEmpty) {
           matchedMethods = getMatchingMethods(aarP, aar, 1.0d, "aar")

@@ -89,7 +89,7 @@ object DBWriter extends AnalysisExecutor {
             val cltxt = sha1Bytes(new StringBuilder(1000000).append(cf.fqn).append(
               cf.fields.map { x => x.toJava })
               .append(cf.methods.map { m =>
-                new StringBuilder(1000000).append(m.toJava()).append(
+                new StringBuilder(1000000).append(m.toJava).append(
                   if (m.body.isDefined && m.body.nonEmpty) m.body.get.toString() else "").toString()
               }).toString())
             clSelect.setBytes(1, cltxt)
@@ -107,7 +107,7 @@ object DBWriter extends AnalysisExecutor {
               clInsert.setInt(4, cf.methods.count { x => x.isMethod }) // method count
               if (clInsert.executeUpdate() == 1) {
                 for (m <- cf.methods) {
-                  val bcode = sha1Bytes(m.toJava() + "\n" + (if (m.body.isDefined && m.body.nonEmpty) m.body.get else ""))
+                  val bcode = sha1Bytes(m.toJava + "\n" + (if (m.body.isDefined && m.body.nonEmpty) m.body.get else ""))
                   mthdSelect.setBytes(1, bcode)
                   val rsmthd: ResultSet = mthdSelect.executeQuery()
                   clXmInsert.setBytes(1, cltxt)
@@ -138,7 +138,7 @@ object DBWriter extends AnalysisExecutor {
                     val fh: FuzzyHash = s.fuzzyHashContext(text2, uniqId + ".txt")
 
                     mthdInsert.setBytes(1, bcode) // byte code
-                    mthdInsert.setBytes(2, sha1Bytes(AddressLessRepresentation.removeModifiers(m.toJava()) + "\n" + irMethod)) // ar
+                    mthdInsert.setBytes(2, sha1Bytes(AddressLessRepresentation.removeModifiers(m.toJava) + "\n" + irMethod)) // ar
                     mthdInsert.setBytes(3, sha1Bytes(text3)) // nlr
                     mthdInsert.setBytes(4, sha1Bytes(text2)) // spr
                     val fhash1: String = fh.getHash
@@ -147,7 +147,7 @@ object DBWriter extends AnalysisExecutor {
                     mthdInsert.setBytes(6, sha1Bytes(fhash1))
                     mthdInsert.setBytes(7, sha1Bytes(fhash2)) // fuzzySPR
                     mthdInsert.setInt(8, getInstructionCount(m))
-                    mthdInsert.setString(9, m.toJava())
+                    mthdInsert.setString(9, m.toJava)
                     mthdInsert.execute()
                   }
                   clXmInsert.executeUpdate()
